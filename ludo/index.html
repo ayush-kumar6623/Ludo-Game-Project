@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberLudo | Modern Glowing Ludo Experience</title>
+  <meta name="description" content="Experience Ludo like never before with glowing aesthetics, interactive 3D dice, smart computer AI, and ambient audio synthesizer.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient glowing backgrounds -->
+  <div class="ambient-glow glow-red"></div>
+  <div class="ambient-glow glow-blue"></div>
+  
+  <div class="app-container">
+    <!-- Header -->
+    <header class="game-header">
+      <div class="logo">
+        <span class="logo-icon">🎲</span>
+        <h1>CYBER<span class="gradient-text">LUDO</span></h1>
+      </div>
+      <div class="header-controls">
+        <button id="btn-sound" class="header-btn" title="Toggle Sound" aria-label="Toggle Sound">
+          <span class="sound-icon">🔊</span>
+        </button>
+        <button id="btn-settings" class="header-btn" title="Game Settings" aria-label="Game Settings">
+          <span>⚙️ Settings</span>
+        </button>
+        <button id="btn-reset" class="header-btn btn-danger" title="Restart Game" aria-label="Restart Game">
+          <span>🔄 Restart</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="game-layout">
+      <!-- Left Column: Player Cards & Control Center -->
+      <section class="control-panel">
+        <div class="panel-card turn-indicator-card">
+          <h2>Current Turn</h2>
+          <div id="current-player-display" class="player-turn-badge player-red">
+            <span class="badge-dot"></span>
+            <span id="current-player-name">Red Player</span>
+          </div>
+          <div id="turn-status-text" class="status-subtext">Roll the die!</div>
+        </div>
+
+        <!-- Player Setup & Status Cards -->
+        <div class="player-cards-container">
+          <!-- Red Player -->
+          <div class="player-card card-red active" id="card-red">
+            <div class="player-card-header">
+              <div class="player-color-indicator"></div>
+              <span class="player-name-label">Red</span>
+              <select class="player-type-select" id="select-red">
+                <option value="human">Human</option>
+                <option value="ai" selected>AI (CPU)</option>
+                <option value="off">Off</option>
+              </select>
+            </div>
+            <div class="player-card-body">
+              <div class="tokens-status">
+                <span class="token-icon">🔴</span>
+                <span id="status-tokens-red">4 at yard</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Green Player -->
+          <div class="player-card card-green" id="card-green">
+            <div class="player-card-header">
+              <div class="player-color-indicator"></div>
+              <span class="player-name-label">Green</span>
+              <select class="player-type-select" id="select-green">
+                <option value="human" selected>Human</option>
+                <option value="ai">AI (CPU)</option>
+                <option value="off">Off</option>
+              </select>
+            </div>
+            <div class="player-card-body">
+              <div class="tokens-status">
+                <span class="token-icon">🟢</span>
+                <span id="status-tokens-green">4 at yard</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Yellow Player -->
+          <div class="player-card card-yellow" id="card-yellow">
+            <div class="player-card-header">
+              <div class="player-color-indicator"></div>
+              <span class="player-name-label">Yellow</span>
+              <select class="player-type-select" id="select-yellow">
+                <option value="human">Human</option>
+                <option value="ai" selected>AI (CPU)</option>
+                <option value="off">Off</option>
+              </select>
+            </div>
+            <div class="player-card-body">
+              <div class="tokens-status">
+                <span class="token-icon">🟡</span>
+                <span id="status-tokens-yellow">4 at yard</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Blue Player -->
+          <div class="player-card card-blue" id="card-blue">
+            <div class="player-card-header">
+              <div class="player-color-indicator"></div>
+              <span class="player-name-label">Blue</span>
+              <select class="player-type-select" id="select-blue">
+                <option value="human">Human</option>
+                <option value="ai" selected>AI (CPU)</option>
+                <option value="off">Off</option>
+              </select>
+            </div>
+            <div class="player-card-body">
+              <div class="tokens-status">
+                <span class="token-icon">🔵</span>
+                <span id="status-tokens-blue">4 at yard</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Game Info & Log -->
+        <div class="panel-card game-log-card">
+          <h3>Activity Feed</h3>
+          <div class="log-entries" id="log-entries">
+            <div class="log-entry system">Welcome to CyberLudo! Configure players and click Start Game.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Center Column: Ludo Board -->
+      <section class="board-area">
+        <div class="ludo-board-wrapper">
+          <div class="ludo-board" id="ludo-board">
+            
+            <!-- Yards (Predefined Static Containers) -->
+            <!-- Red Yard -->
+            <div class="yard yard-red" style="grid-area: 1 / 1 / 7 / 7;">
+              <div class="yard-inner">
+                <div class="yard-slot" id="yard-red-0"></div>
+                <div class="yard-slot" id="yard-red-1"></div>
+                <div class="yard-slot" id="yard-red-2"></div>
+                <div class="yard-slot" id="yard-red-3"></div>
+              </div>
+            </div>
+
+            <!-- Green Yard -->
+            <div class="yard yard-green" style="grid-area: 1 / 10 / 7 / 16;">
+              <div class="yard-inner">
+                <div class="yard-slot" id="yard-green-0"></div>
+                <div class="yard-slot" id="yard-green-1"></div>
+                <div class="yard-slot" id="yard-green-2"></div>
+                <div class="yard-slot" id="yard-green-3"></div>
+              </div>
+            </div>
+
+            <!-- Yellow Yard -->
+            <div class="yard yard-yellow" style="grid-area: 10 / 10 / 16 / 16;">
+              <div class="yard-inner">
+                <div class="yard-slot" id="yard-yellow-0"></div>
+                <div class="yard-slot" id="yard-yellow-1"></div>
+                <div class="yard-slot" id="yard-yellow-2"></div>
+                <div class="yard-slot" id="yard-yellow-3"></div>
+              </div>
+            </div>
+
+            <!-- Blue Yard -->
+            <div class="yard yard-blue" style="grid-area: 10 / 1 / 16 / 7;">
+              <div class="yard-inner">
+                <div class="yard-slot" id="yard-blue-0"></div>
+                <div class="yard-slot" id="yard-blue-1"></div>
+                <div class="yard-slot" id="yard-blue-2"></div>
+                <div class="yard-slot" id="yard-blue-3"></div>
+              </div>
+            </div>
+
+            <!-- Center Triangle (Grid cell 7, 7 to 9, 9) -->
+            <div class="board-center" style="grid-area: 7 / 7 / 10 / 10;">
+              <svg viewBox="0 0 120 120" width="100%" height="100%">
+                <!-- Red (Left) -->
+                <polygon points="0,0 60,60 0,120" fill="var(--red-color)" />
+                <!-- Green (Top) -->
+                <polygon points="0,0 60,60 120,0" fill="var(--green-color)" />
+                <!-- Yellow (Right) -->
+                <polygon points="120,0 60,60 120,120" fill="var(--yellow-color)" />
+                <!-- Blue (Bottom) -->
+                <polygon points="0,120 60,60 120,120" fill="var(--blue-color)" />
+                
+                <!-- Gloss overlays and center decoration -->
+                <polygon points="0,0 60,60 120,0" fill="rgba(255,255,255,0.05)" />
+                <circle cx="60" cy="60" r="18" fill="rgba(255, 255, 255, 0.1)" />
+                <circle cx="60" cy="60" r="10" fill="#181824" />
+                <circle cx="60" cy="60" r="4" fill="#ffffff" />
+              </svg>
+            </div>
+
+            <!-- Path Cells will be dynamically generated by JS to keep code clean and coordinate mappings central -->
+
+          </div>
+        </div>
+
+        <!-- Play Area Interactive Footer (Die & Play Action) -->
+        <div class="action-dock">
+          <!-- 3D Die Container -->
+          <div class="die-container-3d">
+            <div class="scene">
+              <div class="cube" id="cube">
+                <!-- Face 1 -->
+                <div class="cube-face face-1">
+                  <span class="dot"></span>
+                </div>
+                <!-- Face 6 (opposite to 1) -->
+                <div class="cube-face face-6">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+                <!-- Face 2 -->
+                <div class="cube-face face-2">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+                <!-- Face 5 (opposite to 2) -->
+                <div class="cube-face face-5">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+                <!-- Face 3 -->
+                <div class="cube-face face-3">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+                <!-- Face 4 (opposite to 3) -->
+                <div class="cube-face face-4">
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button id="btn-roll" class="btn btn-primary magnetic disabled">
+              <span>Roll Die</span>
+            </button>
+            <div class="roll-result-display" id="roll-val-display">-</div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Game Settings</h2>
+        <button id="btn-close-settings" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-item">
+          <label for="setting-speed">Game Speed</label>
+          <select id="setting-speed">
+            <option value="800">Relaxed</option>
+            <option value="400" selected>Normal</option>
+            <option value="150">Fast (AI blitz)</option>
+          </select>
+        </div>
+        <div class="setting-item">
+          <label for="setting-extra-roll">Re-roll on 6</label>
+          <input type="checkbox" id="setting-extra-roll" checked>
+        </div>
+        <div class="setting-item">
+          <label for="setting-extra-capture">Re-roll on Capture</label>
+          <input type="checkbox" id="setting-extra-capture" checked>
+        </div>
+        <div class="setting-item">
+          <label for="setting-extra-home">Re-roll on Reach Home</label>
+          <input type="checkbox" id="setting-extra-home" checked>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Victory Overlay -->
+  <div class="modal-overlay" id="victory-modal">
+    <div class="victory-card">
+      <div class="winner-trophy">🏆</div>
+      <h2 id="victory-title">Red Player Wins!</h2>
+      <p>Congratulations, you dominated the grid!</p>
+      <button id="btn-victory-restart" class="btn btn-primary">Play Again</button>
+    </div>
+  </div>
+
+  <!-- Victory Canvas for Confetti -->
+  <canvas id="victory-canvas"></canvas>
+
+  <!-- Core Javascript -->
+  <script src="script.js"></script>
+</body>
+</html>
